@@ -1,45 +1,56 @@
 package org.sergiiz.rxkata;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.FutureTask;
-
-import io.reactivex.Observable;
-import io.reactivex.Single;
 
 class CountriesServiceSolved implements CountriesService {
 
     @Override
     public Single<String> countryNameInCapitals(Country country) {
-        return null; // put your solution here
+        return Single.just(country.getName()).map(String::toUpperCase);
     }
 
     public Single<Integer> countCountries(List<Country> countries) {
-        return null; // put your solution here
+        return Single.just(countries.size());
     }
 
     public Observable<Long> listPopulationOfEachCountry(List<Country> countries) {
-        return null; // put your solution here;
+        return Observable.fromArray(countries)
+                .flatMapIterable(country -> country)
+                .map(Country::getPopulation);
     }
 
     @Override
     public Observable<String> listNameOfEachCountry(List<Country> countries) {
-        return null; // put your solution here
+        return Observable.fromArray(countries)
+                .flatMapIterable(country -> country)
+                .map(Country::getName);
     }
 
     @Override
     public Observable<Country> listOnly3rdAnd4thCountry(List<Country> countries) {
-        return null; // put your solution here
+        return Observable.fromArray(countries)
+                .flatMapIterable(country -> country)
+                .skip(2)
+                .take(2);
     }
 
     @Override
     public Single<Boolean> isAllCountriesPopulationMoreThanOneMillion(List<Country> countries) {
-        return null; // put your solution here
+        return Observable.fromArray(countries)
+                .flatMapIterable(country -> country)
+                .all(country -> country.getPopulation() > 1000000);
     }
 
     @Override
     public Observable<Country> listPopulationMoreThanOneMillion(List<Country> countries) {
-        return null; // put your solution here
+        return Observable.fromArray(countries)
+                .flatMapIterable(country -> country)
+                .filter(country -> country.getPopulation() > 1000000);
     }
 
     @Override
